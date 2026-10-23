@@ -1,13 +1,13 @@
 import './style.css'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
-import { generateText } from 'ai'
+import { streamText } from 'ai'
 
 const openrouter = createOpenRouter({
     apiKey: import.meta.env.VITE_OPENROUTER_KEY
 })
 
 const form = document.querySelector('@form')
-form.addEventListener('submit', async e =>{
+form.addEventListener('submit', e =>{
     e.preventDefault()
 
     const prompt = document.querySelector('#prompt').value
@@ -17,7 +17,7 @@ form.addEventListener('submit', async e =>{
         return
     }
 
-    const result = await generateText({
+    const result = streamText({
         model: openrouter('google/gemma-4-26b-a4b-it:free'),
         // model: openrouter('recursive/flint-v1.0:free'),
         // model: openrouter('baseten/mammoth-1:free'),
@@ -25,4 +25,8 @@ form.addEventListener('submit', async e =>{
         // model: openrouter('liquid/lfm-2.5-embedding-350m:free'),
         prompt
     })
+
+    for await (const text of result.textStream){
+        
+    }
 })
