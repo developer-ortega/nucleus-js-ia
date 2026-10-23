@@ -1,7 +1,13 @@
 import './style.css'
+import { createOpenRouter } from '@openrouter/ai-sdk-provider'
+import { generateText } from 'ai'
+
+const openrouter = createOpenRouter({
+    apiKey: import.meta.env.VITE_OPENROUTER_KEY
+})
 
 const form = document.querySelector('@form')
-form.addEventListener('submit', e =>{
+form.addEventListener('submit', async e =>{
     e.preventDefault()
 
     const prompt = document.querySelector('#prompt').value
@@ -10,4 +16,13 @@ form.addEventListener('submit', e =>{
         alert('La consulta no puede ir vacía')
         return
     }
+
+    const result = await generateText({
+        model: openrouter('google/gemma-4-26b-a4b-it:free'),
+        // model: openrouter('recursive/flint-v1.0:free'),
+        // model: openrouter('baseten/mammoth-1:free'),
+        // model: openrouter('inception/mercury-decide:free'),
+        // model: openrouter('liquid/lfm-2.5-embedding-350m:free'),
+        prompt
+    })
 })
